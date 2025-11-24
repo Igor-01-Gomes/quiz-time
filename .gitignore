@@ -1,0 +1,9 @@
+/out/
+/target/
+/build/
+.idea/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
