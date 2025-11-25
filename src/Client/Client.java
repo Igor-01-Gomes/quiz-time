@@ -23,11 +23,11 @@ public class Client {
 
 
 
-    } catch(
-    IOException e) {
-        throw new RuntimeException(e);
+        } catch(
+                IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
 
     void main() {
 
