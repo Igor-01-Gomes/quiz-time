@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
 
@@ -12,16 +13,20 @@ public class Client {
         try (Socket socket = new Socket("localhost", 8888)) {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Scanner sc = new Scanner(System.in);
 
-            String question = in.readLine();
-            System.out.println("Question: " + question);
+            String question;
+            String answer;
 
-            for (int i = 0; i < 4; i++) {
-                String s = in.readLine();
-                System.out.println(s);
+            question = in.readLine();
+            System.out.println(question);
+            while ((answer = sc.nextLine()) != null) {
+                out.println(answer);
+                System.out.println("Sent to Server: " + answer);
+
+                String result = in.readLine();
+                System.out.println("Rätt svar : " + result);
             }
-
-
 
         } catch(
                 IOException e) {
@@ -30,9 +35,7 @@ public class Client {
     }
 
     void main() {
-
+    Client cl = new Client();
     }
-
-
 
 }
