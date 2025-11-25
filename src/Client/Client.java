@@ -10,10 +10,12 @@ import java.util.Scanner;
 public class Client {
 
     public Client() {
-        try (Socket socket = new Socket("localhost", 8888)) {
+        try (Socket socket = new Socket("localhost", 8888);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Scanner sc = new Scanner(System.in);
+
+        ){
 
             String question;
             String answer;
