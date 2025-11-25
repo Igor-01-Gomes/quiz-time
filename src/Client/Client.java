@@ -35,7 +35,6 @@ public class Client {
     }
 
     void main() {
-    Client cl = new Client();
     }
 
 }
