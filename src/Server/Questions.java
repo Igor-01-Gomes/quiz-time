@@ -27,10 +27,10 @@ public class Questions {
         return optionTwo;
     }
     public String getOptionThree() {
-        return optionThree();
+        return optionThree;
     }
     public String getOptionFour() {
-        return optionFour();
+        return optionFour;
     }
     public int getCorrectIndex() {
         return correctIndex;
