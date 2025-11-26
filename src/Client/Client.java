@@ -27,7 +27,7 @@ public class Client {
                 System.out.println("Sent to Server: " + answer);
 
                 String result = in.readLine();
-                System.out.println("Rätt svar : " + result);
+                System.out.println(result);
             }
 
         } catch(
