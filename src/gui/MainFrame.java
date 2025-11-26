@@ -15,8 +15,10 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
 
         StartPanel startPanel = new StartPanel(this);
+        QuestionPanel questionPanel = new QuestionPanel(this);
 
         mainPanel.add(startPanel, "start");
+        mainPanel.add(questionPanel, "question");
 
         add(mainPanel);
         setVisible(true);
