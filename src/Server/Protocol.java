@@ -9,9 +9,9 @@ public class Protocol {
     public String getOutput (String fromClient) {
         if (state == CONNECTED) {
             state = INTHELOOP;
-            return "Fråga :" + db.getQuestion() +"1." + db.getOptionOne() + "2." + db.getOptionTwo() +"\n"+ "3." + db.getOptionThree() + "4." + db.getOptionFour();
+            return "Fråga :" + db.getQuestion() +"1." + db.getOptionOne() + "2." + db.getOptionTwo() + "3." + db.getOptionThree() + "4." + db.getOptionFour();
         } else if (state == INTHELOOP) {
-            return db.getIfCorrect (fromClient.trim());
+            return db.getIfCorrect(fromClient.trim());
 
         }
         return "Something went wrong!";
