@@ -37,8 +37,8 @@ public class ServerPlayer extends Thread {
                  */
             }
             while (true) {
-               String input1 = in.readLine();
-               if (input1.startsWith("Your turn")) {
+                String input1 = in.readLine();
+                if (input1.startsWith("Your turn")) {
                    /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori
@@ -46,7 +46,7 @@ public class ServerPlayer extends Thread {
                    3.Spela nya kategorin
                    4.Skicka över spelet till motståndaren
                    */
-               }
+                }
 
             }
 
@@ -55,7 +55,8 @@ public class ServerPlayer extends Thread {
         }
 
     }
-    public void setOpponent(ServerPlayer opponent){
+
+    public void setOpponent(ServerPlayer opponent) {
         this.opponent = opponent;
     }
 }
