@@ -9,10 +9,14 @@ public class ServerListener {
 
         try (ServerSocket serverSocket = new ServerSocket(8888)) {
             while (true) {
-                Socket socket = serverSocket.accept();
-                Server server = new Server(socket);
-                server.start();
-
+                Game game = new Game();
+                ServerPlayer player1 = new ServerPlayer(serverSocket.accept(), game);
+                ServerPlayer player2 = new ServerPlayer(serverSocket.accept(), game);
+                player1.setOpponent(player2);
+                player2.setOpponent(player1);
+                game.currentPlayer(player2);
+                player1.start();
+                player2.start();
             }
 
         } catch (IOException e) {
