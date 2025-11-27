@@ -29,8 +29,7 @@ public class QuestionPanel extends JPanel {
 
             int finalI = i;
             answerButtons[i].addActionListener(e -> {
-                // För nu bara gå vidare till nästa fråga
-                nextQuestion();
+                handleAnswer(finalI);
             });
         }
 
@@ -38,6 +37,40 @@ public class QuestionPanel extends JPanel {
 
         loadQuestion();
     }
+
+    private void handleAnswer(int selectedIndex) {
+        Questions q = questions.get(currentIndex);
+
+        int correct = q.getCorrectIndex();
+
+        // Färga knappar
+        for (int i = 0; i < 4; i++) {
+            answerButtons[i].setOpaque(true);
+            answerButtons[i].setBorderPainted(false);
+            if (i == correct) {
+                answerButtons[i].setBackground(Color.GREEN);
+            } else if (i == selectedIndex) {
+                answerButtons[i].setBackground(Color.RED);
+            }
+        }
+
+        // Vänta 1 sekund innan nästa fråga så att färgen syns
+        Timer timer = new Timer(1000, e -> {
+            resetButtonColors();
+            nextQuestion();
+        });
+        timer.setRepeats(false);
+        timer.start();
+
+
+    }
+
+    private void resetButtonColors() {
+        for (JButton button : answerButtons) {
+            button.setBackground(null); // återställ färg
+        }
+    }
+
 
     private void loadQuestion() {
         Questions q = questions.get(currentIndex);
