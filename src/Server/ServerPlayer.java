@@ -8,14 +8,12 @@ import java.net.Socket;
 
 
 public class ServerPlayer extends Thread {
-    Protocol p = new Protocol();
-    Game game;
-    Socket socket;
-    BufferedReader in;
-    PrintWriter out;
+    private ServerPlayer opponent;
+    private final Game game;
+    private final BufferedReader in;
+    private final PrintWriter out;
 
     public ServerPlayer(Socket socket, Game game) {
-        this.socket = socket;
         this.game = game;
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -27,10 +25,11 @@ public class ServerPlayer extends Thread {
 
     public void run() {
         try {
-            if (game.currentPlayer == this) {
+            if (game.getCurrentPlayer() == this) {
                 out.println("Välj kategori");
                 String chosenCategory = in.readLine();
-                game.setCategory();
+                game.setCategory(chosenCategory);
+                out.println(game.getCurrentCategory());
                 /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori
@@ -55,6 +54,9 @@ public class ServerPlayer extends Thread {
             throw new RuntimeException(e);
         }
 
+    }
+    public void setOpponent(ServerPlayer opponent){
+        this.opponent = opponent;
     }
 }
 
