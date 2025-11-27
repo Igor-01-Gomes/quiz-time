@@ -1,6 +1,6 @@
 package Server;
 
-public class Questions {
+public class Question {
     private String questionText;
     private String optionOne;
     private String optionTwo;
@@ -8,7 +8,7 @@ public class Questions {
     private String optionFour;
     private int correctIndex;
 
-    public Questions(String questionText, String optionOne, String optionTwo, String optionThree, String optionFour, int correctIndex) {
+    public Question(String questionText, String optionOne, String optionTwo, String optionThree, String optionFour, int correctIndex) {
         this.questionText = questionText;
         this.optionOne = optionOne;
         this.optionTwo = optionTwo;
@@ -27,10 +27,10 @@ public class Questions {
         return optionTwo;
     }
     public String getOptionThree() {
-        return optionThree();
+        return optionThree;
     }
     public String getOptionFour() {
-        return optionFour();
+        return optionFour;
     }
     public int getCorrectIndex() {
         return correctIndex;
