@@ -1,6 +1,6 @@
 package Server;
 
-public class Question {
+public class Questions {
     private String questionText;
     private String optionOne;
     private String optionTwo;
@@ -8,7 +8,7 @@ public class Question {
     private String optionFour;
     private int correctIndex;
 
-    public Question(String questionText, String optionOne, String optionTwo, String optionThree, String optionFour, int correctIndex) {
+    public Questions(String questionText, String optionOne, String optionTwo, String optionThree, String optionFour, int correctIndex) {
         this.questionText = questionText;
         this.optionOne = optionOne;
         this.optionTwo = optionTwo;

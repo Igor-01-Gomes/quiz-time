@@ -5,10 +5,10 @@ import java.util.List;
 
 public class QuestionRepository {
 
-    public static List<Question> getQuestions() {
-        List<Question> list = new ArrayList<>();
+    public static List<Questions> getQuestions() {
+        List<Questions> list = new ArrayList<>();
 
-        list.add(new Question(
+        list.add(new Questions(
                 "Vilket år startade andra världskriget?",
                 "1914",
                 "1939",
@@ -17,7 +17,7 @@ public class QuestionRepository {
                 1
         ));
 
-        list.add(new Question(
+        list.add(new Questions(
                 "Vilket djur är störst?",
                 "Elefant",
                 "Blåval",

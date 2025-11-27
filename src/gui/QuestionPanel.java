@@ -1,6 +1,6 @@
 package gui;
 
-import Server.Question;
+import Server.Questions;
 import Server.QuestionRepository;
 
 import javax.swing.*;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class QuestionPanel extends JPanel {
 
-    private List<Question> questions = QuestionRepository.getQuestions();
+    private List<Questions> questions = QuestionRepository.getQuestions();
     private int currentIndex = 0;
 
     private JLabel questionLabel = new JLabel("", SwingConstants.CENTER);
@@ -40,7 +40,7 @@ public class QuestionPanel extends JPanel {
     }
 
     private void loadQuestion() {
-        Question q = questions.get(currentIndex);
+        Questions q = questions.get(currentIndex);
         questionLabel.setText(q.getQuestionText());
 
         answerButtons[0].setText(q.getOptionOne());
