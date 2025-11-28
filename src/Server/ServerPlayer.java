@@ -30,15 +30,36 @@ public class ServerPlayer extends Thread {
                 String chosenCategory = in.readLine();
                 game.setCategory(chosenCategory);
                 out.println(game.getCurrentCategory());
+                if (game.sendQuestion() != null) {
+                    out.println(game.sendQuestion());
+                    String answer = in.readLine();
+                    out.println(game.sendAnswer(answer));
+                } else if (game.sendQuestion() == null) {
+                    setOpponent(game.getCurrentPlayer());
+                    out.println("Your Turn");
+                }
                 /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori
+                   2.Skicka om det var rätt svar eller ej
                    4.Skicka över spelet till motståndaren
                  */
             }
             while (true) {
                 String input1 = in.readLine();
                 if (input1.startsWith("Your turn")) {
+                    out.println("Välj kategori");
+                    String chosenCategory = in.readLine();
+                    game.setCategory(chosenCategory);
+                    out.println(game.getCurrentCategory());
+                    if (game.sendQuestion() != null) {
+                        out.println(game.sendQuestion());
+                        String answer = in.readLine();
+                        out.println(game.sendAnswer(answer));
+                    } else if (game.sendQuestion() == null) {
+                        setOpponent(game.getCurrentPlayer());
+                        out.println("Your Turn");
+                    }
                    /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori

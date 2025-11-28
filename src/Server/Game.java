@@ -25,5 +25,16 @@ public class Game {
     public ServerPlayer getCurrentPlayer() {
         return currentPlayer;
     }
+    public String sendQuestion() {
+        String question = p.getOutput("QUESTION;");
+        if(question.contains("INGA FLER FRÅGOR")){
+            return null;
+        }
+        return question;
+    }
+    public String sendAnswer(String answer) {
+        String qAnswer = p.getOutput(answer);
+        return qAnswer;
+    }
 
 }
