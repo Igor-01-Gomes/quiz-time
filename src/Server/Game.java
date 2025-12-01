@@ -2,19 +2,19 @@ package Server;
 
 public class Game {
     private Protocol p = new Protocol();
-    private String currentCategory;
     private ServerPlayer currentPlayer;
+
 
 
     public Game() {
     }
 
     public void setCategory(String category) {
-        currentCategory = category;
+        p.getOutput("CATEGORY;" +  category);
     }
 
     public String getCurrentCategory() {
-        return p.getOutput("CATEGORY;" + currentCategory);
+        return p.getCurrentCategory();
     }
 
     public void setCurrentPlayer(ServerPlayer currentPlayer) {
@@ -33,8 +33,6 @@ public class Game {
         return question;
     }
     public String sendAnswer(String answer) {
-        String qAnswer = p.getOutput(answer);
-        return qAnswer;
+        return p.getOutput(answer);
     }
-
 }

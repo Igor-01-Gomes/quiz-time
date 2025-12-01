@@ -24,20 +24,13 @@ public class ServerPlayer extends Thread {
     }
 
     public void run() {
-        try {
+        try { //FÖRSTA SOM SPELAR EN GÅNG
             if (game.getCurrentPlayer() == this) {
                 out.println("Välj kategori");
                 String chosenCategory = in.readLine();
                 game.setCategory(chosenCategory);
-                out.println(game.getCurrentCategory());
-                if (game.sendQuestion() != null) {
-                    out.println(game.sendQuestion());
-                    String answer = in.readLine();
-                    out.println(game.sendAnswer(answer));
-                } else if (game.sendQuestion() == null) {
-                    setOpponent(game.getCurrentPlayer());
-                    out.println("Your Turn");
-                }
+//                out.println(game.getCurrentCategory());
+                gameRound();
                 /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori
@@ -47,19 +40,14 @@ public class ServerPlayer extends Thread {
             }
             while (true) {
                 String input1 = in.readLine();
-                if (input1.startsWith("Your turn")) {
-                    out.println("Välj kategori");
-                    String chosenCategory = in.readLine();
-                    game.setCategory(chosenCategory);
-                    out.println(game.getCurrentCategory());
-                    if (game.sendQuestion() != null) {
-                        out.println(game.sendQuestion());
-                        String answer = in.readLine();
-                        out.println(game.sendAnswer(answer));
-                    } else if (game.sendQuestion() == null) {
-                        setOpponent(game.getCurrentPlayer());
-                        out.println("Your Turn");
-                    }
+                game.sendQuestion();
+                out.println("Välj kategori");
+                String chosenCategory = in.readLine();
+                game.setCategory(chosenCategory);
+                out.println(game.getCurrentCategory());
+                if (game.getCurrentCategory().contains("KATEGORI OK;")) {
+                    gameRound();
+                }
                    /*
                    0.Hämta frågor från Game av vald kategori
                    1.Svara på frågorna från nuvarande kategori
@@ -67,13 +55,24 @@ public class ServerPlayer extends Thread {
                    3.Spela nya kategorin
                    4.Skicka över spelet till motståndaren
                    */
-                }
+
 
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    private void gameRound() throws IOException {
+        String question = game.sendQuestion();
+        if (question != null) {
+            out.println(question);
+            String answer = in.readLine();
+            out.println(game.sendAnswer(answer));
+        }
+        game.setCurrentPlayer(opponent);
 
     }
 

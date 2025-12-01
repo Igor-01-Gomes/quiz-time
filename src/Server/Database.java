@@ -24,7 +24,6 @@ public class Database {
             categoryIndex.put(category, 0);
         }
     }
-
     public Questions getNextQuestions(String category) {
 
         List<Questions> questions = data.get(category);
@@ -38,7 +37,6 @@ public class Database {
         categoryIndex.put(category, index + 1);
         return q;
     }
-
     public String getIfCorrect(String answer, Questions q) {
         int guess = Integer.parseInt(answer);
         return (guess == q.getCorrectIndex()) ? "Rätt" : "Fel";
