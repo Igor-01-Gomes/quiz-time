@@ -52,11 +52,48 @@ public class QuestionPanel extends JPanel {
 
         totalAnswered++;
 
+        // Lås knappar så man inte kan klicka flera gånger
+        for (JButton btn : answerButtons) {
+            btn.setEnabled(false);
+        }
+
+        // Färga knappar
+        for (int i = 0; i < 4; i++) {
+            answerButtons[i].setOpaque(true);
+            answerButtons[i].setBorderPainted(false);
+
+            if (i == correct) {
+                answerButtons[i].setBackground(Color.GREEN);
+            } else if (i == selectedIndex) {
+                answerButtons[i].setBackground(Color.RED);
+            }
+        }
+
+        // Räkna poäng
         if (selectedIndex == correct) {
             correctAnswers++;
         }
 
-        nextQuestion();
+        // Vänta 1 sekund innan nästa fråga visas
+        Timer timer = new Timer(1000, e -> {
+            resetButtonColors();
+
+            // öppna knappar igen
+            for (JButton btn : answerButtons) {
+                btn.setEnabled(true);
+            }
+
+            nextQuestion();
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private void resetButtonColors() {
+        for (JButton button : answerButtons) {
+            button.setBackground(null);
+        }
     }
 
     private void loadQuestion() {
