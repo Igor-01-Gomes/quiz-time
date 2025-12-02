@@ -10,11 +10,18 @@ import java.util.Scanner;
 public class Client {
 
     public Client() {
+
+        Socket socket = null;
+        BufferedReader in = null;
+        PrintWriter out = null;
+        Scanner sc = null;
+
+
         try {
-            Socket socket = new Socket("localhost", 8888);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            Scanner sc = new Scanner(System.in);
+            socket = new Socket("localhost", 8888);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            sc = new Scanner(System.in);
 
             String categoryQuestion;
             String answer;
@@ -36,12 +43,31 @@ public class Client {
 
         } catch (IOException e) {
             System.out.println("Unexpected error " + e.getMessage());
+
+
+        } finally {
+            try {
+                if (out != null)
+                    out.close();
+
+                if (in != null)
+                    in.close();
+                } catch (IOException ignored) {}
+
+                try {
+                    if (socket != null)
+                        socket.close();
+                } catch (IOException ignored) {
+
+
+            }
         }
     }
 
-    public static void main() {
+
+    public static void main() throws IOException {
 //        new gui.MainFrame();
         new Client();
     }
-
 }
+
