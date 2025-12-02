@@ -1,50 +1,36 @@
 package Server;
 
 public class Protocol {
-    private final int CONNECTED = 0;
-    private final int ASKING = 1;
-    private final int ANSWERING = 2;
-    protected int state = CONNECTED;
-
     Database db = new Database();
     private String currentCategory = null;
     private Questions currentQuestions = null;
 
-    public String getOutput (String fromClient) {
-        switch (state) {
-            case CONNECTED: {
-                if (fromClient != null && fromClient.startsWith("CATEGORY;")) {
-                    currentCategory = fromClient.split(";")[1].trim();
-                    state = ASKING;
+    public String OutputCategory (String fromClient) {
+                if (fromClient == null || !fromClient.startsWith("CATEGORY;"))
+                    return "ERROR: Expected CATEGORY";
+                currentCategory = fromClient.split(";")[1].trim();
                     return "KATEGORI OK;" + currentCategory;
-                }
-                return "ERROR: Expected CATEGORY";
-            }
-            case ASKING: {
-                currentQuestions = db.getNextQuestions(currentCategory);
-                if (currentQuestions == null) {
-                    return "INGA FLER FRÅGOR";
-                }
+    }
 
-                state = ANSWERING;
+    public String OutputGetQuestion() {
+                if (currentCategory == null)
+                    return "Error: no category selected";
+
+                currentQuestions = db.getNextQuestions(currentCategory);
+                if (currentQuestions == null)
+                    return "INGA FLER FRÅGOR";
 
                 return "QUESTION;" + currentQuestions.getQuestionText() + ";"
                         + currentQuestions.getOptionOne() + ";"
                         + currentQuestions.getOptionTwo() + ";"
                         + currentQuestions.getOptionThree() + ";"
                         + currentQuestions.getOptionFour();
-            }
-            case ANSWERING: {
-                String result = db.getIfCorrect(fromClient.trim(), currentQuestions);
-                state = ASKING;
-                return "RESULTAT;" + result;
-            }
-        }
-        return "ERROR";
     }
-    public String getCurrentCategory() {
-        return currentCategory;
+
+    public String outPutAnswer(String fromClient) {
+                    if (currentQuestions == null)
+                        return "Error: No question";
+                String result = db.getIfCorrect(fromClient.trim(), currentQuestions);
+                return "RESULTAT;" + result;
     }
 }
-
-
