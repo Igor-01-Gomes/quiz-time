@@ -33,4 +33,20 @@ public class Protocol {
                 String result = db.getIfCorrect(fromClient.trim(), currentQuestions);
                 return "RESULTAT;" + result;
     }
+
+    public Questions getCurrentQuestion() {
+        return currentQuestions;
+    }
+
+    public String formatCurrentQuestion() {
+        if (currentQuestions == null) {
+            return "Error: No question";
+        }
+
+        return "QUESTION;" + currentQuestions.getQuestionText() + ";"
+                + currentQuestions.getOptionOne() + ";"
+                + currentQuestions.getOptionTwo() + ";"
+                + currentQuestions.getOptionThree() + ";"
+                + currentQuestions.getOptionFour();
+    }
 }
