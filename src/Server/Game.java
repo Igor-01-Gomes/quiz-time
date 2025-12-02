@@ -35,6 +35,14 @@ public class Game {
         return currentPlayer;
     }
 
+    public void switchToNextPlayer(ServerPlayer nextPlayer) {
+        this.currentPlayer = nextPlayer;
+    }
+
+    public boolean isPlayersTurn(ServerPlayer player) {
+        return this.currentPlayer == player;
+    }
+
     public String sendQuestion() {
 
         if (currentQuestion == null) {
