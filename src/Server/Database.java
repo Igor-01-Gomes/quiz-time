@@ -1,45 +1,46 @@
 package Server;
 
-import java.util.Random;
+import java.util.*;
 
 public class Database {
-    private Questions[] questions;
-    private Questions currentQuestion;
-    private Random rand = new Random();
+    private Map<String, List<Questions>> data = new HashMap<>();
+    private Map<String, Integer> categoryIndex = new HashMap<>();
 
     public Database() {
-        questions = new Questions[]{
-                new Questions("Var ligger alperna?", "Afrika", "USA", "Europa", "Asien", 3),
-                new Questions("Vilket bilmärke är från Tyskland?", "Ferrari", "Lamborghini", "Volvo", "Porsche", 4)
-        };
+        data.put("Bilar", List.of(
+                new Questions("Vilket bilmärke är från Tyskland?","Toyota", "Volvo", "Porsche", "Ford", 3),
+                new Questions("Vilket land tillverkar världens snabbaste bil?", "Tyskland", "Italien", "USA", "Sverige", 4)
+                ));
+        data.put("Musik", List.of(
+                new Questions("Vilken artist är känd för låten Nights?", "Frank Ocean", "Dominic Fike", "Billie Eilish", "Olivia Dean", 1),
+                new Questions("Vad heter Fleetwood Macs mest populära album?", "Californication", "Tango in the night", "Rumours", "The Dance", 3)
+                ));
+        data.put("Geografi", List.of(
+                new Questions("I vilken världsdel ligger Alperna?", "Nordamerika","Sydamerika", "Asien", "Europa", 4),
+                new Questions("Vilket land är mest känt för surfing?", "Costa Rica", "Austrailen", "Sri Lanka", "Portugal", 2)
+                ));
 
+        for (String category : data.keySet()) {
+            categoryIndex.put(category, 0);
         }
-        public String getQuestion() {
-        currentQuestion = questions[rand.nextInt(questions.length)];
-        return currentQuestion.getQuestionText();
     }
-    public String getOptionOne() {
-        return currentQuestion.getOptionOne();
-    }
-    public String getOptionTwo() {
-        return currentQuestion.getOptionTwo();
-    }
-    public String getOptionThree() {
-        return currentQuestion.getOptionThree();
-    }
-    public String getOptionFour() {
-        return currentQuestion.getOptionFour();
-    }
-    public String getIfCorrect(String answer) {
-        try {
-            int ans = Integer.parseInt(answer.trim());
-            if (ans == currentQuestion.getCorrectIndex()){
-                return "Rätt!";
-            } else {
-                return "Fel! Rätt Svar: " + currentQuestion.getCorrectIndex();
-            }
-        } catch (Exception e) {
-        return "Ange ett tal 1-4";
+
+    public Questions getNextQuestions(String category) {
+
+        List<Questions> questions = data.get(category);
+        int index = categoryIndex.get(category);
+
+        if (index >= questions.size()) {
+            return null;
         }
+
+        Questions q = questions.get(index);
+        categoryIndex.put(category, index + 1);
+        return q;
+    }
+
+    public String getIfCorrect(String answer, Questions q) {
+        int guess = Integer.parseInt(answer);
+        return (guess == q.getCorrectIndex()) ? "Rätt" : "Fel";
     }
 }

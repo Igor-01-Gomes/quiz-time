@@ -29,7 +29,8 @@ public class QuestionPanel extends JPanel {
 
             int finalI = i;
             answerButtons[i].addActionListener(e -> {
-                handleAnswer(finalI);
+                // För nu bara gå vidare till nästa fråga
+                nextQuestion();
             });
         }
 
