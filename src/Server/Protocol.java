@@ -13,7 +13,7 @@ public class Protocol {
     public String getOutput (String fromClient) {
         switch (state) {
             case CONNECTED: {
-                if (fromClient.startsWith("CATEGORY;")) {
+                if (fromClient != null && fromClient.startsWith("CATEGORY;")) {
                     currentCategory = fromClient.split(";")[1].trim();
                     state = ASKING;
                     return "KATEGORI OK;" + currentCategory;
@@ -28,7 +28,7 @@ public class Protocol {
 
                 state = ANSWERING;
 
-                return "FRÅGA;" + currentQuestions.getQuestionText() + ";"
+                return "QUESTION;" + currentQuestions.getQuestionText() + ";"
                         + currentQuestions.getOptionOne() + ";"
                         + currentQuestions.getOptionTwo() + ";"
                         + currentQuestions.getOptionThree() + ";"
@@ -41,6 +41,9 @@ public class Protocol {
             }
         }
         return "ERROR";
+    }
+    public String getCurrentCategory() {
+        return currentCategory;
     }
 }
 

@@ -17,11 +17,11 @@ public class Client {
 
         ){
 
-            String question;
+            String categoryQuestion;
             String answer;
 
-            question = in.readLine();
-            System.out.println(question);
+            categoryQuestion = in.readLine();
+            System.out.println(categoryQuestion);
             while ((answer = sc.nextLine()) != null) {
                 out.println(answer);
                 System.out.println("Sent to Server: " + answer);
@@ -36,7 +36,9 @@ public class Client {
         }
     }
 
-    void main() {
+    public static void main() {
+//        new gui.MainFrame();
+        new Client();
     }
 
 }
