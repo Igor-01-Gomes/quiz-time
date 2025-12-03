@@ -6,6 +6,7 @@ public class Database {
     private Map<String, List<Questions>> data = new HashMap<>();
     private Map<String, Integer> categoryIndex = new HashMap<>();
 
+
     public Database() {
         data.put("Bilar", List.of(
                 new Questions("Vilket bilmärke är från Tyskland?","Toyota", "Volvo", "Porsche", "Ford", 3),
@@ -40,5 +41,13 @@ public class Database {
     public String getIfCorrect(String answer, Questions q) {
         int guess = Integer.parseInt(answer);
         return (guess == q.getCorrectIndex()) ? "Rätt" : "Fel";
+    }
+
+    public Set<String> getAllCategories() {
+        return data.keySet();
+    }
+
+    public Map<String, List<Questions>> getData() {
+        return data;
     }
 }

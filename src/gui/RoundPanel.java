@@ -17,6 +17,7 @@ public class RoundPanel extends JPanel {
         nextButton.setFont(new Font("Arial", Font.PLAIN, 18));
 
         nextButton.addActionListener(e -> {
+            frame.getQuestionPanel().startRound();
             frame.showPanel("question");
         });
 

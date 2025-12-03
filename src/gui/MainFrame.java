@@ -1,7 +1,11 @@
 package gui;
 
+import Server.Database;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
 
@@ -10,6 +14,8 @@ public class MainFrame extends JFrame {
 
     private RoundPanel roundPanel;
     private QuestionPanel questionPanel;
+
+    private Database database = new Database();
 
     public MainFrame() {
         setTitle("Quiz Game");
@@ -28,6 +34,14 @@ public class MainFrame extends JFrame {
 
         add(mainPanel);
         setVisible(true);
+    }
+
+    // Getter så QuestionPanel kan få databasen
+    public Database getDatabase() {
+        return database;
+    }
+    public List<String> getCategories() {
+        return new ArrayList<>(database.getAllCategories());
     }
 
     public RoundPanel getRoundPanel() {

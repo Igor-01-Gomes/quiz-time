@@ -1,37 +1,48 @@
 package gui;
 
+import Server.Database;
 import Server.Questions;
-import Server.QuestionRepository;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class QuestionPanel extends JPanel {
 
     private MainFrame frame;
+    private Database database;
 
-    private List<Questions> questions = QuestionRepository.getQuestions();
-    private int currentIndex = 0;
+    private List<String> categories;
+    private int categoryIndex = 0;
+
+    private Questions currentQuestion;
+
+    private int currentRound = 1;
+    private int questionsPerRound = 2;
+    private int questionInRound = 0;
 
     private int correctAnswers = 0;
     private int totalAnswered = 0;
-    private int questionInRound = 0;
-    private int questionsPerRound = 2;
-    private int currentRound = 1;
 
     private JLabel questionLabel = new JLabel("", SwingConstants.CENTER);
     private JButton[] answerButtons = new JButton[4];
 
     public QuestionPanel(MainFrame frame) {
         this.frame = frame;
+        this.database = frame.getDatabase();
+
+        // Hämta kategorier från databasen
+        Set<String> categorySet = database.getData().keySet();
+        categories = new ArrayList<>(categorySet);
 
         setLayout(new BorderLayout());
 
         questionLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(questionLabel, BorderLayout.NORTH);
 
-        JPanel answersPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        JPanel answersPanel = new JPanel(new GridLayout(2, 2, 10, 10));
 
         for (int i = 0; i < 4; i++) {
             answerButtons[i] = new JButton();
@@ -43,16 +54,44 @@ public class QuestionPanel extends JPanel {
 
         add(answersPanel, BorderLayout.CENTER);
 
-        loadQuestion();
+        loadNextQuestion();
+    }
+
+    private void loadNextQuestion() {
+        if (categoryIndex >= categories.size()) {
+            categoryIndex = 0;
+        }
+
+        String currentCategory = categories.get(categoryIndex);
+
+        currentQuestion = database.getNextQuestions(currentCategory);
+
+        // Om kategorin är slut, hoppa till nästa kategori
+//        if (currentQuestion == null) {
+//            categoryIndex++;
+//            loadNextQuestion();
+//            return;
+//        }
+
+        questionLabel.setText(currentQuestion.getQuestionText());
+
+        answerButtons[0].setText(currentQuestion.getOptionOne());
+        answerButtons[1].setText(currentQuestion.getOptionTwo());
+        answerButtons[2].setText(currentQuestion.getOptionThree());
+        answerButtons[3].setText(currentQuestion.getOptionFour());
+    }
+
+    public void startRound() {
+        // ladda nästa kategori om categoryIndex pekar på en ny kategori redan
+        loadNextQuestion();
     }
 
     private void handleAnswer(int selectedIndex) {
-        Questions q = questions.get(currentIndex);
-        int correct = q.getCorrectIndex();
 
         totalAnswered++;
+        int correctIndex = currentQuestion.getCorrectIndex() - 1; // Vår DATA ÄR 1-indexerad
 
-        // Lås knappar så man inte kan klicka flera gånger
+        // Lås knapparna
         for (JButton btn : answerButtons) {
             btn.setEnabled(false);
         }
@@ -62,27 +101,20 @@ public class QuestionPanel extends JPanel {
             answerButtons[i].setOpaque(true);
             answerButtons[i].setBorderPainted(false);
 
-            if (i == correct) {
+            if (i == correctIndex) {
                 answerButtons[i].setBackground(Color.GREEN);
             } else if (i == selectedIndex) {
                 answerButtons[i].setBackground(Color.RED);
             }
         }
 
-        // Räkna poäng
-        if (selectedIndex == correct) {
+        if (selectedIndex == correctIndex) {
             correctAnswers++;
         }
 
-        // Vänta 1 sekund innan nästa fråga visas
+        // Vänta lite innan nästa fråga
         Timer timer = new Timer(1000, e -> {
-            resetButtonColors();
-
-            // öppna knappar igen
-            for (JButton btn : answerButtons) {
-                btn.setEnabled(true);
-            }
-
+            resetButtons();
             nextQuestion();
         });
 
@@ -90,50 +122,40 @@ public class QuestionPanel extends JPanel {
         timer.start();
     }
 
-    private void resetButtonColors() {
-        for (JButton button : answerButtons) {
-            button.setBackground(null);
+
+    private void resetButtons() {
+        for (JButton btn : answerButtons) {
+            btn.setBackground(null);
+            btn.setEnabled(true);
         }
-    }
-
-    private void loadQuestion() {
-        Questions q = questions.get(currentIndex);
-        questionLabel.setText(q.getQuestionText());
-
-        answerButtons[0].setText(q.getOptionOne());
-        answerButtons[1].setText(q.getOptionTwo());
-        answerButtons[2].setText(q.getOptionThree());
-        answerButtons[3].setText(q.getOptionFour());
     }
 
     private void nextQuestion() {
         questionInRound++;
 
+        // Kolla om ronden är slut
         if (questionInRound >= questionsPerRound) {
 
-            int total = totalAnswered;
-            int correct = correctAnswers;
+            String summary = "<html><center>Rond " + currentRound + " klar!" +
+                    "<br>Du fick " + correctAnswers + " av " + totalAnswered + " rätt.</center></html>";
 
-            String text = "<html><center>Rond " + currentRound + " klar!<br>" +
-                    "Du fick " + correct + " av " + total + " rätt.</center></html>";
+            RoundPanel roundPanel = frame.getRoundPanel();
+            roundPanel.setSummaryText(summary);
 
-            RoundPanel round = frame.getRoundPanel();
-            round.setSummaryText(text);
-
-            currentRound++;
+            // Förbered nästa rond
             questionInRound = 0;
-            correctAnswers = 0;
+            currentRound++;
             totalAnswered = 0;
+            correctAnswers = 0;
+
+            // Gå vidare till nästa kategori
+            categoryIndex++;
 
             frame.showPanel("round");
             return;
         }
 
-        currentIndex++;
-        if (currentIndex >= questions.size()) {
-            currentIndex = 0;
-        }
-
-        loadQuestion();
+        // Annars ladda nästa fråga
+        loadNextQuestion();
     }
 }
