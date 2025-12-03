@@ -12,6 +12,8 @@ public class ServerPlayer extends Thread {
     private final Game game;
     private final BufferedReader in;
     private final PrintWriter out;
+    private int score = 0;
+
 
     public ServerPlayer(Socket socket, Game game) {
         this.game = game;
@@ -42,7 +44,21 @@ public class ServerPlayer extends Thread {
                     out.println(game.sendQuestion());
                 }else if (input1.startsWith("ANSWER;")){
                     String answer = game.sendAnswer(input1.split(";")[1]);
+
+                    if (answer.equals("RESULTAT;Rätt")) {
+                        score++;
+                    }
+
                     out.println(answer);
+
+                    if (game.isGameOver()) {
+                        out.println("GAME;SLUT;" + score + ";" + opponent.score);
+                        if (opponent != null) {
+                            opponent.out.println("GAME;SLUT;" + opponent.score + ";" + score);
+                        }
+                        break;
+                    }
+
                     if(game.shallChooseNewCategory()) {
                         out.println("DECIDE;");
                     }else {
@@ -51,7 +67,6 @@ public class ServerPlayer extends Thread {
                     /*
                     * OM DET ÄR SISTA RUNDAN ÄR SPELAD SKICKA "END;" SOM KEYWORD
                     * */
-
                 }
             }
 
