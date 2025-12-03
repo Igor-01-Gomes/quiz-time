@@ -27,10 +27,10 @@ public class PropertiesC {
     }
 
     public int getRounds() {
-        return Integer.parseInt(propertiesC.getProperty("runda", "1"));
+        return Integer.parseInt(propertiesC.getProperty("rounds", "1"));
     }
 
     public int getQuestionPerRound() {
-        return Integer.parseInt(propertiesC.getProperty("frågaPerRunda", "1"));
+        return Integer.parseInt(propertiesC.getProperty("questionsPerRound", "1"));
     }
 }

@@ -15,12 +15,12 @@ public class Game {
         this.questionsPerRound = properties.getQuestionPerRound();
     }
 
-    public void setCategory(String category) {
-        this.currentCategory = category;
+    public void setCategory(String command) {
+        this.currentCategory = command.split(";")[1];
         this.currentQuestionNumber = 0;
         this.currentQuestion = null;
         this.answersOnCurrentQuestion = 0;
-        protocol.OutputCategory("CATEGORY;" + category);
+        protocol.OutputCategory(command);
     }
 
     public String getCurrentCategory() {
@@ -80,4 +80,14 @@ public class Game {
     public Questions getCurrentQuestion() {
         return currentQuestion;
     }
+    public void changePlayer(ServerPlayer newPlayer) {
+        currentPlayer = newPlayer;
+        currentPlayer.opponentDone();
+    }
+    public boolean shallChooseNewCategory() {
+        return currentQuestionNumber >= questionsPerRound && currentQuestion == null;
+    }
+    /*
+    * KOLL OM SISTA RUNDAN ÄR SPELAD
+    * */
 }
