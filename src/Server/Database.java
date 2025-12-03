@@ -41,4 +41,12 @@ public class Database {
         int guess = Integer.parseInt(answer);
         return (guess == q.getCorrectIndex()) ? "Rätt" : "Fel";
     }
+
+    public Set<String> getAllCategories() {
+        return data.keySet();
+    }
+
+    public Map<String, List<Questions>> getData() {
+        return data;
+    }
 }
