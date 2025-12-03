@@ -52,9 +52,9 @@ public class ServerPlayer extends Thread {
                     out.println(answer);
 
                     if (game.isGameOver()) {
-                        out.println("GAME;SLUT;" + score + ";" + opponent.score);
+                        out.println("END;" + score + ";" + opponent.score);
                         if (opponent != null) {
-                            opponent.out.println("GAME;SLUT;" + opponent.score + ";" + score);
+                            opponent.out.println("END;" + opponent.score + ";" + score);
                         }
                         break;
                     }
