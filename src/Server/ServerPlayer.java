@@ -22,57 +22,42 @@ public class ServerPlayer extends Thread {
             throw new RuntimeException(e);
         }
     }
+    public void opponentDone(){
+        out.println(game.sendQuestion());
+    }
 
     public void run() {
-        try { //FÖRSTA SOM SPELAR EN GÅNG
+        try {
             if (game.getCurrentPlayer() == this) {
-                out.println("Välj kategori");
-                String chosenCategory = in.readLine();
-                game.setCategory(chosenCategory);
-//                out.println(game.getCurrentCategory());
-                gameRound();
-                /*
-                   0.Hämta frågor från Game av vald kategori
-                   1.Svara på frågorna från nuvarande kategori
-                   2.Skicka om det var rätt svar eller ej
-                   4.Skicka över spelet till motståndaren
-                 */
+                out.println("DECIDE;");
+
             }
             while (true) {
                 String input1 = in.readLine();
-                game.sendQuestion();
-                out.println("Välj kategori");
-                String chosenCategory = in.readLine();
-                game.setCategory(chosenCategory);
-                out.println(game.getCurrentCategory());
-                if (game.getCurrentCategory().contains("KATEGORI OK;")) {
-                    gameRound();
+                if(!game.getCurrentPlayer().equals(this)) {
+                    return;
                 }
-                   /*
-                   0.Hämta frågor från Game av vald kategori
-                   1.Svara på frågorna från nuvarande kategori
-                   2.Välja en ny kategori
-                   3.Spela nya kategorin
-                   4.Skicka över spelet till motståndaren
-                   */
+                if (input1.startsWith("CATEGORY;")){
+                    game.setCategory(input1);
+                    out.println(game.sendQuestion());
+                }else if (input1.startsWith("ANSWER;")){
+                    String answer = game.sendAnswer(input1.split(";")[1]);
+                    out.println(answer);
+                    if(game.shallChooseNewCategory()) {
+                        out.println("DECIDE;");
+                    }else {
+                       game.changePlayer(opponent);
+                    }
+                    /*
+                    * OM DET ÄR SISTA RUNDAN ÄR SPELAD SKICKA "END;" SOM KEYWORD
+                    * */
 
-
+                }
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    private void gameRound() throws IOException {
-        String question = game.sendQuestion();
-        if (question != null) {
-            out.println(question);
-            String answer = in.readLine();
-            out.println(game.sendAnswer(answer));
-        }
-        game.setCurrentPlayer(opponent);
 
     }
 
