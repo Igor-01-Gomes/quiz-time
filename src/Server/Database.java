@@ -19,7 +19,10 @@ public class Database {
                 new Questions("I vilken världsdel ligger Alperna?", "Nordamerika", "Sydamerika", "Asien", "Europa", 4),
                 new Questions("Vilket land är mest känt för surfing?", "Costa Rica", "Austrailen", "Sri Lanka", "Portugal", 2)
         ));
-//        data.put("Historia", List.of())
+        data.put("Historia", List.of(
+                new Questions("Vad kallades den period då Sverige var en stormakt?","Medeltiden","Vikingatiden","Stormaktstiden","Frihetstiden",3),
+                new Questions("Vilket år sjönk Titanic?","2012","1912","1916","1516",2)
+        ));
 
         for (String category : data.keySet()) {
             categoryIndex.put(category, 0);

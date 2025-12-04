@@ -39,7 +39,7 @@ public class ServerPlayer extends Thread {
             while (true) {
                 String input1 = in.readLine();
                 if (!game.getCurrentPlayer().equals(this)) {
-                    return;
+                    continue;
                 }
                 if (input1.startsWith("CATEGORY;")) {
                     game.setCategory(input1);
