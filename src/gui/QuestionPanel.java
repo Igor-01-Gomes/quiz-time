@@ -129,20 +129,23 @@ public class QuestionPanel extends JPanel {
             btn.setEnabled(true);
         }
     }
-
     private void nextQuestion() {
         questionInRound++;
 
         // Kolla om ronden är slut
         if (questionInRound >= questionsPerRound) {
 
+            // Skicka rondernas poäng till servern innan vi nollställer
+            // OBS: se till att QuizClient har metoden sendRoundResult(int correct, int total)
+            frame.getClient().sendRoundResult(correctAnswers, questionsPerRound);
+
             String summary = "<html><center>Rond " + currentRound + " klar!" +
-                    "<br>Du fick " + correctAnswers + " av " + totalAnswered + " rätt.</center></html>";
+                    "<br>Du fick " + correctAnswers + " av " + questionsPerRound + " rätt.</center></html>";
 
             RoundPanel roundPanel = frame.getRoundPanel();
             roundPanel.setSummaryText(summary);
 
-            // Förbered nästa rond
+            // Förbered nästa rond — *nollställ EFTER att vi skickat poängen*
             questionInRound = 0;
             currentRound++;
             totalAnswered = 0;
@@ -158,5 +161,37 @@ public class QuestionPanel extends JPanel {
         // Annars ladda nästa fråga
         loadNextQuestion();
     }
+
+
+//    private void nextQuestion() {
+//        questionInRound++;
+//
+//        // Kolla om ronden är slut
+//        if (questionInRound >= questionsPerRound) {
+//
+//            String summary = "<html><center>Rond " + currentRound + " klar!" +
+//                    "<br>Du fick " + correctAnswers + " av " + totalAnswered + " rätt.</center></html>";
+//
+//            RoundPanel roundPanel = frame.getRoundPanel();
+//            roundPanel.setSummaryText(summary);
+//
+//            // Förbered nästa rond
+//            questionInRound = 0;
+//            currentRound++;
+//            totalAnswered = 0;
+//            correctAnswers = 0;
+//
+//            // Gå vidare till nästa kategori
+//            categoryIndex++;
+//            frame.getClient().sendRoundResult(correctAnswers, totalAnswered);
+//
+//            frame.showPanel("round");
+//
+//            return;
+//        }
+//
+//        // Annars ladda nästa fråga
+//        loadNextQuestion();
+//    }
 }
 

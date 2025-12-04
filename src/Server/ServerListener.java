@@ -1,30 +1,37 @@
 package Server;
 
-import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-//FUNGERAR
-public class ServerListener {
-    public ServerListener() {
 
-        try (ServerSocket serverSocket = new ServerSocket(8888)) {
+public class ServerListener implements Runnable {
+
+    @Override
+    public void run() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(8888);
+            System.out.println("Server started");
+
             while (true) {
                 Game game = new Game();
-                ServerPlayer player1 = new ServerPlayer(serverSocket.accept(), game);
-                ServerPlayer player2 = new ServerPlayer(serverSocket.accept(), game);
-                player1.setOpponent(player2);
-                player2.setOpponent(player1);
-                game.setCurrentPlayer(player2);
-                player1.start();
-                player2.start();
+
+                System.out.println("Waiting for player 1");
+                ServerPlayer p1 = new ServerPlayer(serverSocket.accept(), game);
+                game.setPlayer1(p1);
+
+                System.out.println("Waiting for player 2");
+                ServerPlayer p2 = new ServerPlayer(serverSocket.accept(), game);
+                game.setPlayer2(p2);
+
+                p1.setOpponent(p2);
+                p2.setOpponent(p1);
+
+                p1.start();
+                p2.start();
+
+                System.out.println("Game started!");
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-    }
-
-    void main() {
     }
 }
