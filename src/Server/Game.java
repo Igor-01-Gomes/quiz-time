@@ -10,9 +10,12 @@ public class Game {
     private int currentQuestionNumber = 0;
     private final int questionsPerRound;
     private int answersOnCurrentQuestion = 0;
+    private final int totalRounds;
+    private int roundsPlayed = 0;
 
     public Game() {
         this.questionsPerRound = properties.getQuestionPerRound();
+        this.totalRounds = properties.getRounds();
     }
 
     public void setCategory(String command) {
@@ -20,6 +23,7 @@ public class Game {
         this.currentQuestionNumber = 0;
         this.currentQuestion = null;
         this.answersOnCurrentQuestion = 0;
+        this.roundsPlayed++;
         protocol.OutputCategory(command);
     }
 
@@ -85,9 +89,17 @@ public class Game {
         currentPlayer.opponentDone();
     }
     public boolean shallChooseNewCategory() {
-        return currentQuestionNumber >= questionsPerRound && currentQuestion == null;
+        return currentQuestionNumber >= questionsPerRound
+                && currentQuestion == null
+                && roundsPlayed < totalRounds;
     }
     /*
     * KOLL OM SISTA RUNDAN ÄR SPELAD
     * */
+    public boolean isGameOver() {
+        boolean noQuestionsLeftInRound = currentQuestion == null
+                && currentQuestionNumber >= questionsPerRound;
+        boolean noRoundsLeft = roundsPlayed >= totalRounds;
+        return noQuestionsLeftInRound && noRoundsLeft;
+    }
 }
