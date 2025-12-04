@@ -111,10 +111,10 @@ public class Client {
         out.flush();
     }
 
-    public void sendToNextRound() {
-        out.println("NEXTROUND;");
-        out.flush();
-    }
+//    public void sendToNextRound() {
+//        out.println("NEXTROUND;");
+//        out.flush();
+//    }
 
     public static void main(String[] args) {
         Client client = new Client();

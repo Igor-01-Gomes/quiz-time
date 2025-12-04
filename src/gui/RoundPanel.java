@@ -23,14 +23,14 @@ public class RoundPanel extends JPanel {
         summaryTextArea.setFont(new Font("Arial", Font.BOLD, 24));
         add(summaryTextArea, BorderLayout.NORTH);
 
-        JButton nextButton = new JButton("Nästa rond");
-        nextButton.setFont(new Font("Arial", Font.PLAIN, 18));
+//        JButton nextButton = new JButton("Nästa rond");
+//        nextButton.setFont(new Font("Arial", Font.PLAIN, 18));
 
-        nextButton.addActionListener(e -> {
-            goToNextRound();
-        });
+//        nextButton.addActionListener(e -> {
+//            goToNextRound();
+//        });
 
-        add(nextButton, BorderLayout.SOUTH);
+//        add(nextButton, BorderLayout.SOUTH);
     }
 
     public void setSummaryText(String summaryText) {
@@ -41,7 +41,5 @@ public class RoundPanel extends JPanel {
         summaryTextArea.append("Rond " + index +" "+ score + "\n");
         index++;
     }
-    public void goToNextRound(){
-        client.sendToNextRound();
-    }
+
 }

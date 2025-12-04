@@ -12,7 +12,7 @@ public class MainFrame extends JFrame {
     private RoundPanel roundPanel;
     private QuestionPanel questionPanel;
     private StartPanel startPanel;
-    private CategoryPanel categoryPanel;
+//    private CategoryPanel categoryPanel;
 
     private final Client client;
 
@@ -28,13 +28,13 @@ public class MainFrame extends JFrame {
         startPanel = new StartPanel(this, client);
         roundPanel = new RoundPanel(this, client);
         questionPanel = new QuestionPanel(this, client);
-        categoryPanel = new CategoryPanel(this, client);
+//        categoryPanel = new CategoryPanel(this, client);
 
         // Lägg till paneler i CardLayout
         mainPanel.add(startPanel, "start");
         mainPanel.add(questionPanel, "question");
         mainPanel.add(roundPanel, "round");
-        mainPanel.add(categoryPanel, "category");
+//        mainPanel.add(categoryPanel, "category");
 
         add(mainPanel);
         setVisible(true);
@@ -48,9 +48,9 @@ public class MainFrame extends JFrame {
         return questionPanel;
     }
 
-    public CategoryPanel getCategoryPanel() {
-        return categoryPanel;
-    }
+//    public CategoryPanel getCategoryPanel() {
+//        return categoryPanel;
+//    }
 
     public void showPanel(String name) {
         cardLayout.show(mainPanel, name);
@@ -62,20 +62,20 @@ public class MainFrame extends JFrame {
 
 
     public void showCategoryChoice() {
-        showPanel("category");
-//        String[] categories = {"Bilar", "Musik", "Geografi"};
-//        String choice = (String)
-//                JOptionPane.showInputDialog(
-//                        this,
-//                        "Välj kategori:",
-//                        "Kategori",
-//                        JOptionPane.QUESTION_MESSAGE,
-//                        null,
-//                        categories,
-//                        categories[0]);
-//        if (choice != null) {
-//            client.sendCategory(choice);
-//        }
+//        showPanel("category");
+        String[] categories = {"Bilar", "Musik", "Geografi"};
+        String choice = (String)
+                JOptionPane.showInputDialog(
+                        this,
+                        "Välj kategori:",
+                        "Kategori",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        categories,
+                        categories[0]);
+        if (choice != null) {
+            client.sendCategory(choice);
+        }
     }
 
     public void showQuestion(String question, String[] options) {

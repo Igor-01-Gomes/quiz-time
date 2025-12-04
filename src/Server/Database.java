@@ -19,7 +19,6 @@ public class Database {
                 new Questions("I vilken världsdel ligger Alperna?", "Nordamerika", "Sydamerika", "Asien", "Europa", 4),
                 new Questions("Vilket land är mest känt för surfing?", "Costa Rica", "Austrailen", "Sri Lanka", "Portugal", 2)
         ));
-//        data.put("Historia", List.of())
 
         for (String category : data.keySet()) {
             categoryIndex.put(category, 0);

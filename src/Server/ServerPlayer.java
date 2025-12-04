@@ -71,18 +71,17 @@ public class ServerPlayer extends Thread {
                     }
 
                     if (game.shallChooseNewCategory()) {
-                        if (input1.equals("NEXTROUND;")) {
                             out.println("DECIDE;");
-                        }
+
                     } else {
                         game.changePlayer(opponent);
                     }
-                } else if (input1.equals("NEXTROUND;")) {
-                    if (game.getCurrentPlayer().equals(this)) {
-                        out.println("DECIDE;");
-                    }else {
-                        return;
-                    }
+//                } else if (input1.equals("NEXTROUND;")) {
+//                    if (game.getCurrentPlayer().equals(this)) {
+//                        out.println("DECIDE;");
+//                    }else {
+//                        return;
+//                    }
                 }
             }
 
