@@ -24,7 +24,7 @@ public class Game {
         this.currentQuestion = null;
         this.answersOnCurrentQuestion = 0;
         this.roundsPlayed++;
-        protocol.OutputCategory(command);
+        protocol.outputCategory(command);
     }
 
     public String getCurrentCategory() {
@@ -47,7 +47,7 @@ public class Game {
                 return null;
             }
 
-            String questionMessage = protocol.OutputGetQuestion();
+            String questionMessage = protocol.outputGetQuestion();
 
             if (questionMessage.startsWith("INGA FLER FRÅGOR")) {
                 return null;
@@ -81,25 +81,31 @@ public class Game {
 
         return result;
     }
+
     public Questions getCurrentQuestion() {
         return currentQuestion;
     }
+
     public void changePlayer(ServerPlayer newPlayer) {
         currentPlayer = newPlayer;
         currentPlayer.opponentDone();
     }
+
     public boolean shallChooseNewCategory() {
         return currentQuestionNumber >= questionsPerRound
                 && currentQuestion == null
                 && roundsPlayed < totalRounds;
     }
-    /*
-    * KOLL OM SISTA RUNDAN ÄR SPELAD
-    * */
+
     public boolean isGameOver() {
         boolean noQuestionsLeftInRound = currentQuestion == null
                 && currentQuestionNumber >= questionsPerRound;
         boolean noRoundsLeft = roundsPlayed >= totalRounds;
         return noQuestionsLeftInRound && noRoundsLeft;
+    }
+
+    public boolean shallPrintScore() {
+        return currentQuestionNumber >= questionsPerRound
+                && currentQuestion == null;
     }
 }

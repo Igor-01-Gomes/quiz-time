@@ -1,30 +1,23 @@
 package gui;
 
-import Server.Questions;
-import Server.QuestionRepository;
+import Client.Client;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class QuestionPanel extends JPanel {
 
-    private MainFrame frame;
+    private final MainFrame frame;
+    private final Client client;
 
-    private List<Questions> questions = QuestionRepository.getQuestions();
-    private int currentIndex = 0;
+    private final JLabel questionLabel = new JLabel("", SwingConstants.CENTER);
+    private final JButton[] answerButtons = new JButton[4];
 
-    private int correctAnswers = 0;
-    private int totalAnswered = 0;
-    private int questionInRound = 0;
-    private int questionsPerRound = 2;
-    private int currentRound = 1;
+    private int lastSelectedIndex = -1;
 
-    private JLabel questionLabel = new JLabel("", SwingConstants.CENTER);
-    private JButton[] answerButtons = new JButton[4];
-
-    public QuestionPanel(MainFrame frame) {
+    public QuestionPanel(MainFrame frame, Client client) {
         this.frame = frame;
+        this.client = client;
 
         setLayout(new BorderLayout());
 
@@ -35,105 +28,47 @@ public class QuestionPanel extends JPanel {
 
         for (int i = 0; i < 4; i++) {
             answerButtons[i] = new JButton();
+            int index = i;
+            answerButtons[i].addActionListener(e -> handleAnswer(index));
             answersPanel.add(answerButtons[i]);
-
-            int finalI = i;
-            answerButtons[i].addActionListener(e -> handleAnswer(finalI));
         }
 
         add(answersPanel, BorderLayout.CENTER);
+    }
 
-        loadQuestion();
+    public void colorButton(String color) {
+        for (int i = 0; i < 4; i++) {
+
+            answerButtons[i].setOpaque(true);
+            answerButtons[i].setEnabled(false);
+
+            if (i == lastSelectedIndex) {
+                answerButtons[i].setBackground(
+                        color.equalsIgnoreCase("Rätt") ? Color.GREEN : Color.RED);
+            }
+        }
+    }
+
+    public void showQuestion(String question, String[] options) {
+        questionLabel.setText(question);
+
+        for (int i = 0; i < 4; i++) {
+            answerButtons[i].setText(options[i]);
+            answerButtons[i].setEnabled(true);
+            answerButtons[i].setBorderPainted(false);
+            answerButtons[i].setOpaque(true);
+            answerButtons[i].setBackground(null);
+        }
+
     }
 
     private void handleAnswer(int selectedIndex) {
-        Questions q = questions.get(currentIndex);
-        int correct = q.getCorrectIndex();
+        lastSelectedIndex = selectedIndex;
+//        for (JButton btn : answerButtons) {
+//            btn.setEnabled(false);
+//        }
 
-        totalAnswered++;
-
-        // Lås knappar så man inte kan klicka flera gånger
-        for (JButton btn : answerButtons) {
-            btn.setEnabled(false);
-        }
-
-        // Färga knappar
-        for (int i = 0; i < 4; i++) {
-            answerButtons[i].setOpaque(true);
-            answerButtons[i].setBorderPainted(false);
-
-            if (i == correct) {
-                answerButtons[i].setBackground(Color.GREEN);
-            } else if (i == selectedIndex) {
-                answerButtons[i].setBackground(Color.RED);
-            }
-        }
-
-        // Räkna poäng
-        if (selectedIndex == correct) {
-            correctAnswers++;
-        }
-
-        // Vänta 1 sekund innan nästa fråga visas
-        Timer timer = new Timer(1000, e -> {
-            resetButtonColors();
-
-            // öppna knappar igen
-            for (JButton btn : answerButtons) {
-                btn.setEnabled(true);
-            }
-
-            nextQuestion();
-        });
-
-        timer.setRepeats(false);
-        timer.start();
-    }
-
-    private void resetButtonColors() {
-        for (JButton button : answerButtons) {
-            button.setBackground(null);
-        }
-    }
-
-    private void loadQuestion() {
-        Questions q = questions.get(currentIndex);
-        questionLabel.setText(q.getQuestionText());
-
-        answerButtons[0].setText(q.getOptionOne());
-        answerButtons[1].setText(q.getOptionTwo());
-        answerButtons[2].setText(q.getOptionThree());
-        answerButtons[3].setText(q.getOptionFour());
-    }
-
-    private void nextQuestion() {
-        questionInRound++;
-
-        if (questionInRound >= questionsPerRound) {
-
-            int total = totalAnswered;
-            int correct = correctAnswers;
-
-            String text = "<html><center>Rond " + currentRound + " klar!<br>" +
-                    "Du fick " + correct + " av " + total + " rätt.</center></html>";
-
-            RoundPanel round = frame.getRoundPanel();
-            round.setSummaryText(text);
-
-            currentRound++;
-            questionInRound = 0;
-            correctAnswers = 0;
-            totalAnswered = 0;
-
-            frame.showPanel("round");
-            return;
-        }
-
-        currentIndex++;
-        if (currentIndex >= questions.size()) {
-            currentIndex = 0;
-        }
-
-        loadQuestion();
+        int answerNumber = selectedIndex + 1;
+        client.sendAnswer(answerNumber);
     }
 }

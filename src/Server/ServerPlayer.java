@@ -13,6 +13,7 @@ public class ServerPlayer extends Thread {
     private final BufferedReader in;
     private final PrintWriter out;
     private int score = 0;
+    private int totalScore = 0;
 
 
     public ServerPlayer(Socket socket, Game game) {
@@ -24,7 +25,8 @@ public class ServerPlayer extends Thread {
             throw new RuntimeException(e);
         }
     }
-    public void opponentDone(){
+
+    public void opponentDone() {
         out.println(game.sendQuestion());
     }
 
@@ -36,37 +38,51 @@ public class ServerPlayer extends Thread {
             }
             while (true) {
                 String input1 = in.readLine();
-                if(!game.getCurrentPlayer().equals(this)) {
-                    return;
+                if (!game.getCurrentPlayer().equals(this)) {
+                    continue;
                 }
-                if (input1.startsWith("CATEGORY;")){
+                if (input1.startsWith("CATEGORY;")) {
                     game.setCategory(input1);
                     out.println(game.sendQuestion());
-                }else if (input1.startsWith("ANSWER;")){
+                } else if (input1.startsWith("ANSWER;")) {
                     String answer = game.sendAnswer(input1.split(";")[1]);
 
                     if (answer.equals("RESULTAT;Rätt")) {
                         score++;
+                        totalScore++;
                     }
 
                     out.println(answer);
 
                     if (game.isGameOver()) {
-                        out.println("END;" + score + ";" + opponent.score);
+                        out.println("END;" + totalScore + "-" + opponent.totalScore);
                         if (opponent != null) {
-                            opponent.out.println("END;" + opponent.score + ";" + score);
+                            opponent.out.println("END;" + opponent.totalScore + "-" + totalScore);
                         }
                         break;
                     }
+                    if (game.shallPrintScore()) {
+                        out.println("ROUNDOVER;" + score + "-" + opponent.score);
+                        if (opponent != null) {
+                            opponent.out.println("ROUNDOVER;" + opponent.score + "-" + score);
+                            score = 0;
+                            opponent.score = 0;
+                        }
+                    }
 
-                    if(game.shallChooseNewCategory()) {
+                    if (game.shallChooseNewCategory()) {
+                        if (input1.equals("NEXTROUND;")) {
+                            out.println("DECIDE;");
+                        }
+                    } else {
+                        game.changePlayer(opponent);
+                    }
+                } else if (input1.equals("NEXTROUND;")) {
+                    if (game.getCurrentPlayer().equals(this)) {
                         out.println("DECIDE;");
                     }else {
-                       game.changePlayer(opponent);
+                        return;
                     }
-                    /*
-                    * OM DET ÄR SISTA RUNDAN ÄR SPELAD SKICKA "END;" SOM KEYWORD
-                    * */
                 }
             }
 
