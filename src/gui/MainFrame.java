@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 
         setTitle("Quiz Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 400);
+        setSize(600, 600);
         setLocationRelativeTo(null);
 
         // Initiera paneler
@@ -63,19 +63,6 @@ public class MainFrame extends JFrame {
 
     public void showCategoryChoice() {
         showPanel("category");
-//        String[] categories = {"Bilar", "Musik", "Geografi"};
-//        String choice = (String)
-//                JOptionPane.showInputDialog(
-//                        this,
-//                        "Välj kategori:",
-//                        "Kategori",
-//                        JOptionPane.QUESTION_MESSAGE,
-//                        null,
-//                        categories,
-//                        categories[0]);
-//        if (choice != null) {
-//            client.sendCategory(choice);
-//        }
     }
 
     public void showQuestion(String question, String[] options) {
@@ -86,21 +73,30 @@ public class MainFrame extends JFrame {
     public void showResult(String result) {
         colorButton(result);
         showPanel("question");
-
     }
 
     public void showRoundResult(String result) {
         roundPanel.setRoundScore(result);
-
         showPanel("round");
-
     }
 
+
     public void showEnd(String summary) {
-        roundPanel.setSummaryText("Slutresultat: " + summary);
+
+        String[] parts = summary.split("-");
+
+        int my = Integer.parseInt(parts[0]);
+        int opponent = Integer.parseInt(parts[1]);
+
+        String finalText =
+                "<html>Slutresultat:<br>" +
+                        "Dina slutpoäng = " + my + "<br>" +
+                        "Motståndarens slutpoäng = " + opponent +
+                        "</html>";
+
+        roundPanel.setSummaryText(finalText);
 
         showPanel("round");
-
     }
 }
 
